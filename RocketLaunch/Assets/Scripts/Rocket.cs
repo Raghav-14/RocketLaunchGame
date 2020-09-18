@@ -65,8 +65,9 @@ public class Rocket : MonoBehaviour
 
     private void RotationOfRocket()
     {
+        rigidBody.angularVelocity = Vector3.zero; // remove rotation due to physics
+
         float rotationAngle = trustRotate * Time.deltaTime;
-        rigidBody.freezeRotation = true;
         if (Input.GetKey(KeyCode.LeftArrow))
         {
             transform.Rotate(Vector3.forward * rotationAngle);
@@ -75,7 +76,6 @@ public class Rocket : MonoBehaviour
         {
             transform.Rotate(-Vector3.forward * rotationAngle);
         }
-        rigidBody.freezeRotation = false;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -102,12 +102,18 @@ public class Rocket : MonoBehaviour
 
     private void LoadNextScene()
     {
-        SceneManager.LoadScene("Level-2");
+        int currentScene = SceneManager.GetActiveScene().buildIndex;
+        int nextScene = currentScene+1;
+        if(currentScene == SceneManager.sceneCountInBuildSettings)
+        {
+            nextScene = 0;
+        }
+        SceneManager.LoadScene(nextScene);
     }
 
     private void LoadBeginingScene()
     {
-        SceneManager.LoadScene("Level-1");
+        SceneManager.LoadScene(0);
     }
 
 }
